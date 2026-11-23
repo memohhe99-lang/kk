@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="MSRAI_Label_dbd012e0-e600-4c3e-83b7-7d3141c15efc_AI_Disclosure" content="Made with AI">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clean &amp; Schee | Angebotskalkulation</title>
+<style>
+:root{
+  --navy:#0e2a47;--navy-2:#163b61;--primary:#0b6bcb;--primary-d:#0957a6;--primary-l:#e8f1fb;
+  --accent:#10a37f;--accent-l:#e6f6f1;--warn:#c27a0e;--warn-l:#fff5e1;--danger:#c23b3b;--danger-l:#fdeceb;
+  --bg:#f3f6fa;--card:#ffffff;--line:#e2e8f0;--line-2:#cfd8e3;--text:#0f2236;--muted:#5d7187;--soft:#f7f9fc;
+  --radius:14px;--shadow:0 1px 2px rgba(15,34,54,.05),0 4px 16px rgba(15,34,54,.06);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-size:15px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:var(--text)}
+
+/* Header */
+.top{background:linear-gradient(120deg,var(--navy),var(--navy-2));color:#fff}
+.top-inner{max-width:1280px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.12);display:grid;place-items:center;border:1px solid rgba(255,255,255,.18)}
+.brand h1{margin:0;font-size:20px;font-weight:700;letter-spacing:.2px}
+.brand p{margin:2px 0 0;font-size:13px;color:#b9cde2}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;border-radius:10px;padding:10px 16px;font-weight:600;font-size:14px;background:var(--primary);color:#fff;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--primary-d)}
+.btn.ghost{background:transparent;color:var(--primary);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--primary-l)}
+.btn.light{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:#fff}
+.btn.light:hover{background:rgba(255,255,255,.2)}
+.btn.danger{background:transparent;color:var(--danger);border-color:#efc6c6}
+.btn.danger:hover{background:var(--danger-l)}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:8px}
+
+/* Tabs */
+.tabs{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.tabs-inner{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;overflow-x:auto;gap:4px}
+.tab{background:none;border:0;padding:14px 16px 12px;display:flex;align-items:center;gap:10px;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;text-align:start}
+.tab .num{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--soft);border:1px solid var(--line-2);font-size:13px;font-weight:700}
+.tab b{display:block;font-size:14px;color:var(--text)}
+.tab small{display:block;font-size:12px}
+.tab.active{border-bottom-color:var(--primary)}
+.tab.active .num{background:var(--primary);border-color:var(--primary);color:#fff}
+.tab:hover b{color:var(--primary)}
+
+/* Layout */
+.layout{max-width:1280px;margin:0 auto;padding:24px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.side{position:sticky;top:84px}
+@media(max-width:1020px){.layout{grid-template-columns:1fr;padding:16px}.side{display:none}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:20px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+.card h2{margin:0;font-size:18px}
+.card .sub{margin:4px 0 0;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px 16px}
+.grid.g3{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#33485e}
+.field .hint{font-weight:400;color:var(--muted);font-size:12px}
+.inp{position:relative;display:flex;align-items:center}
+.inp input,.field select,.field textarea,.inp-plain{width:100%;border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;background:#fff;font-weight:500;outline:none;transition:border-color .15s,box-shadow .15s}
+.inp input{padding-inline-end:52px}
+.inp .unit{position:absolute;inset-inline-end:12px;color:var(--muted);font-size:13px;font-weight:500;pointer-events:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(11,107,203,.15)}
+.field input.overridden{border-color:#e3a444;background:#fffaf0}
+.field textarea{resize:vertical;min-height:64px}
+.span2{grid-column:span 2}
+@media(max-width:520px){.span2{grid-column:auto}}
+
+/* Segmented */
+.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line-2);border-radius:10px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 12px;border-radius:7px;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--primary);box-shadow:0 1px 3px rgba(15,34,54,.12)}
+
+/* Switch */
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:14px;color:var(--text);user-select:none}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .track{width:40px;height:22px;border-radius:22px;background:#c9d3de;position:relative;flex:0 0 auto;transition:background .15s}
+.switch .track::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
+.switch input:checked+.track{background:var(--primary)}
+.switch input:checked+.track::after{transform:translateX(18px)}
+.switch input:focus-visible+.track{box-shadow:0 0 0 3px rgba(11,107,203,.25)}
+.field .switch{margin-top:8px}
+
+/* Service rows */
+.svc{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:#fff}
+.svc.on{border-color:#b9d4ef;background:linear-gradient(0deg,#fff,#fff) padding-box}
+.svc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px}
+.svc-head .desc{color:var(--muted);font-size:12px;font-weight:400;margin-top:2px}
+.svc-body{padding:4px 16px 16px;border-top:1px dashed var(--line)}
+.svc-body .grid{margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;background:var(--soft);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.pill.blue{background:var(--primary-l);color:var(--primary);border-color:#cfe2f6}
+.pill.green{background:var(--accent-l);color:#0b7a5f;border-color:#c3eadc}
+.pill.orange{background:var(--warn-l);color:var(--warn);border-color:#f3dcae}
+.pill.red{background:var(--danger-l);color:var(--danger);border-color:#f1c9c9}
+.linkbtn{border:0;background:none;color:var(--primary);font-weight:600;font-size:12px;padding:0}
+.linkbtn:hover{text-decoration:underline}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.kpi span{display:block;font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.kpi strong{display:block;font-size:22px;margin-top:6px}
+.kpi.main{background:linear-gradient(135deg,var(--primary),#0a4f96);color:#fff;border:0}
+.kpi.main span{color:#cfe3f7}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:start}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700}
+td.r,th.r{text-align:end;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--line-2);border-bottom:0}
+tr.sum td{font-weight:700;background:var(--soft)}
+tr.price td{font-weight:800;font-size:16px;color:var(--primary);border-bottom:0}
+
+/* Alerts */
+.alert{display:flex;gap:10px;padding:11px 14px;border-radius:10px;margin:8px 0;font-size:14px;border:1px solid}
+.alert.warn{background:var(--warn-l);border-color:#f3dcae;color:#7a4c06}
+.alert.err{background:var(--danger-l);border-color:#f1c9c9;color:#8e2525}
+.alert.ok{background:var(--accent-l);border-color:#c3eadc;color:#0b6a52}
+.alert.info{background:var(--primary-l);border-color:#cfe2f6;color:#0d4c8c}
+.muted{color:var(--muted);font-size:13px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.stat{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--muted)}
+.stat strong{display:block;color:var(--text);font-size:18px;margin-top:2px}
+.divider{height:1px;background:var(--line);margin:18px 0}
+
+/* Sidebar summary */
+.sum-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.sum-top{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;padding:20px}
+.sum-top small{color:#b9cde2;font-size:12px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.sum-top .price{font-size:34px;font-weight:800;margin:4px 0 2px;letter-spacing:-.5px}
+.sum-top .once{font-size:13px;color:#d6e6f5}
+.sum-list{padding:8px 20px 6px}
+.sum-list div{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sum-list div:last-child{border-bottom:0}
+.sum-list span{color:var(--muted)}
+.sum-list b{font-variant-numeric:tabular-nums}
+.sum-foot{padding:14px 20px 18px;display:flex;flex-direction:column;gap:8px}
+
+/* Mobile bar */
+.mbar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:#fff;padding:12px 18px;z-index:30;justify-content:space-between;align-items:center;box-shadow:0 -4px 14px rgba(0,0,0,.15)}
+.mbar strong{font-size:20px}
+.mbar small{display:block;font-size:12px;color:#b9cde2}
+@media(max-width:1020px){.mbar{display:flex}body{padding-bottom:76px}}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--danger)}
+@media(max-width:1020px){.toast{bottom:90px}}
+
+footer{max-width:1280px;margin:0 auto;padding:0 24px 30px;color:var(--muted);font-size:12px}
+
+/* Print */
+#printView{display:none}
+@media print{
+  body{background:#fff;padding:0}
+  .top,.tabs,.layout,.mbar,.toast,footer{display:none!important}
+  #printView{display:block;font-size:12px;color:#000;padding:0 6mm}
+  #printView h1{font-size:20px;margin:0 0 4px}
+  #printView h2{font-size:14px;margin:18px 0 6px;border-bottom:1px solid #999;padding-bottom:4px}
+  #printView table{font-size:12px}
+  #printView th,#printView td{padding:5px 4px;border-bottom:1px solid #ddd}
+  @page{margin:14mm}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.2 5.8L20 10l-5.8 2.2L12 18l-2.2-5.8L4 10l5.8-2.2L12 2z" fill="#7fd3ff"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <h1>Clean &amp; Schee</h1>
+        <p>Interne Angebotskalkulation · Version 2</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="btn light" id="printBtn" type="button">Übersicht drucken</button>
+      <button class="btn light" id="newProject" type="button">+ Neues Objekt</button>
+    </div>
+  </div>
+</header>
+<nav class="tabs"><div class="tabs-inner" id="tabs"></div></nav>
+<div class="layout">
+  <main id="content"></main>
+  <aside class="side" id="side"></aside>
+</div>
+<footer>Alle Beträge netto, zzgl. gesetzlicher MwSt. · Daten werden nur lokal in diesem Browser gespeichert – regelmäßig ein Backup exportieren.</footer>
+<div class="mbar" id="mbar"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="printView"></div>
+
+<script>
+'use strict';
+/* ===================== Stammdaten ===================== */
+const TABS=[['Objekt','Kunde & Objekt'],['Leistungen','Basis & Zusatz'],['Fenster','Glasreinigung'],['Kalkulation','Preis & Kosten'],['Einstellungen','Sätze & Werte']];
+const TYPES=['Büro','Arztpraxis','Privathaushalt','Fitnessstudio','Kanzlei','Gastronomie','Einkaufsladen','Friseursalon','Sonstiges'];
+const STORE='cs_kalkulator_v1';
+const DEFAULTS={
+  ownerRate:20,profit:20,targetLow:30,targetHigh:40,monthlyHours:100,travelRate:16,kmRate:.4,equipmentRate:1,
+  insurance:55,administration:35,software:15,taxAdvisor:60,phone:25,marketing:30,bg:30,
+  clothes:.3,training:.3,extraInsurance:.5,
+  material:{'Büro':1.5,'Arztpraxis':2.5,'Privathaushalt':1.5,'Fitnessstudio':2.5,'Kanzlei':1.5,'Gastronomie':4,'Einkaufsladen':3,'Friseursalon':2.5,'Sonstiges':2},
+  speed:{'Büro':150,'Arztpraxis':100,'Privathaushalt':60,'Fitnessstudio':120,'Kanzlei':150,'Gastronomie':80,'Einkaufsladen':250,'Friseursalon':100,'Sonstiges':100},
+  wcMin:12,kitchenMin:15,basicMin:{surface:3,stations:5,bins:2,handles:1,entrance:1},
+  floorMin:5,stairsMin:3,roundMinutes:15,
+  surcharge:{Morgens:0,'Tagsüber':0,Abends:10,Nachts:25,Wochenende:25},
+  windows:{Klein:8,Normal:12,'Groß':20,Fensterfront:30},windowInside:1,windowOutside:1.15,windowBoth:1.8,windowFrame:4,windowSill:2,
+  windowAccess:{Erdgeschoss:1,Teleskopstange:1.3,Leiter:1.5,Hubsteiger:2},
+  disposal:15,freeZoneKm:0,minVisit:0,
+  machine:{'Scheuersaugmaschine':6,'Einscheibenmaschine':4,'Profi-Sauger':2}
+};
+const FIXED=[['insurance','Betriebshaftpflicht'],['administration','Verwaltung'],['software','Software'],['taxAdvisor','Steuerberater'],['phone','Telefon'],['marketing','Marketing'],['bg','Berufsgenossenschaft']];
+const BASIC=[
+  ['floor','Bodenreinigung','m²','Zeit aus Gesamtfläche, Flächenleistung der Objektart und Verschmutzungsgrad'],
+  ['surface','Ablagen & Oberflächen','Stk.','Regale, Theken, Ablagen – nicht zusätzlich bei Arbeitsplätzen zählen'],
+  ['stations','Arbeitsplätze','Stk.','Schreibtische oder Friseurplätze ohne bereits erfasste Ablagen'],
+  ['bins','Papierkörbe & Müll','Stk.','Leeren in den Kundencontainer'],
+  ['sanitary','Sanitärreinigung','WC','Anzahl leer = WC-Anzahl aus „Objekt“'],
+  ['kitchen','Küche / Teeküche','Stk.','Anzahl leer = Küchen-Anzahl aus „Objekt“'],
+  ['handles','Türgriffe & Kontaktflächen','Stk.','Türgriffe, Lichtschalter, Handläufe'],
+  ['entrance','Eingang / Treppenhaus','m²','Separate Fläche – nicht in der Gesamtfläche enthalten']
+];
+const EXTRAS=[['fridge','Kühlschrank / Mikrowelle',20],['highDust','Hochstaub',25],['blinds','Jalousien',30],['carpetDeep','Teppich-Grundreinigung',90],['floorDeep','Bodengrundreinigung / Polieren',120],['stairsDeep','Treppenhaus-Grundreinigung',60],['takeWaste','Müll mitnehmen (inkl. Entsorgungsgebühr)',20],['bulky','Sperrmüll / Entrümpelung',120],['custom','Eigene Leistung',30]];
+const FREQ={weekly:52,monthly:12,quarterly:4,halfyear:2,yearly:1,once:0};
+const FREQ_L={weekly:'Wöchentlich',monthly:'Monatlich',quarterly:'Alle 3 Monate',halfyear:'2× jährlich',yearly:'Jährlich',once:'Einmalig'};
+const SOIL={leicht:.8,normal:1,stark:1.4};
+const WINDOW_SLOTS=['Morgens','Tagsüber','Abends','Nachts','Wochenende'];
+
+function fresh(){return{
+  customer:{name:'',contact:'',phone:'',email:'',address:'',notes:'',access:''},
+  object:{type:'Büro',area:0,wc:0,kitchen:0,floors:1,elevator:false,soil:'normal',floorTypes:{Fliesen:0,Teppich:0,Parkett:0,PVC:0,Sonstiges:0}},
+  schedule:{mode:'weekly',perWeek:1,window:'Tagsüber',travelMin:0,km:0,parking:0},
+  basic:Object.fromEntries(BASIC.map(x=>[x[0],{enabled:x[0]==='floor',qty:0,autoOverride:null}])),
+  extras:Object.fromEntries(EXTRAS.map(x=>[x[0],{enabled:false,minutes:x[2],override:null,frequency:'monthly',name:''}])),
+  window:{enabled:false,counts:{Klein:0,Normal:0,'Groß':0,Fensterfront:0},sides:'both',access:'Erdgeschoss',frame:false,sill:false,frequency:'quarterly',separate:false,override:null},
+  calc:{visitOverride:null,marginOverride:null,manualPrice:null,machine:'Keine',machineHours:0,extraCosts:0}
+};}
+
+/* ===================== Hilfsfunktionen ===================== */
+const clone=o=>JSON.parse(JSON.stringify(o));
+const n=v=>(v===null||v===undefined||v==='')?0:(Number.isFinite(Number(v))?Number(v):0);
+const isSet=v=>v!==null&&v!==undefined&&v!=='';
+const fmt=(v,d=2)=>Number.isFinite(Number(v))?Number(v).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d}):'–';
+const fmtN=v=>Number.isFinite(Number(v))?Number(v).toLocaleString('de-DE',{maximumFractionDigits:2}):'–';
+const eur=v=>Number.isFinite(Number(v))?fmt(v)+' €':'Ungültig';
+const hrs=v=>fmt(v)+' Std.';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function merge(a,b){
+  if(a===null||typeof a!=='object'||Array.isArray(a))return b===undefined?a:b;
+  if(b===null||typeof b!=='object'||Array.isArray(b))return clone(a);
+  const o=clone(a);for(const k of Object.keys(b)){if(k in o)o[k]=merge(o[k],b[k]);}return o;
+}
+/* Deutsche und internationale Zahleneingabe: "12,5" · "1.234,50" · "1234.5" */
+function parseNum(str){
+  let s=String(str??'').trim().replace(/[\s€%]/g,'');
+  if(s==='')return null;
+  if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');
+  else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+  const v=Number(s);return Number.isFinite(v)?v:NaN;
+}
+const inputVal=v=>isSet(v)?String(v).replace('.',','):'';
+
+let settings=clone(DEFAULTS),project=fresh(),snapshots=[],tab=0;
+try{
+  const x=JSON.parse(localStorage.getItem(STORE)||'null');
+  if(x){settings=merge(DEFAULTS,x.settings||{});project=merge(fresh(),x.project||{});snapshots=Array.isArray(x.snapshots)?x.snapshots:[];}
+}catch(e){setTimeout(()=>toast('Gespeicherte Daten konnten nicht geladen werden.',true),300);}
+function save(){try{localStorage.setItem(STORE,JSON.stringify({settings,project,snapshots}));}catch(e){toast('Speicher voll – bitte Backup exportieren und alte Snapshots löschen.',true);}}
+function root(path){return path.startsWith('settings.')?{settings}:{project};}
+function get(path){return path.split('.').reduce((o,k)=>o==null?undefined:o[k],root(path));}
+function setRaw(path,val){const p=path.split('.');let o=root(path);for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=val;}
+function set(path,val){setRaw(path,val);save();render();}
+let toastTimer;
+function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='toast',3200);}
+
+/* ===================== Berechnung ===================== */
+function calc(){
+  const S=settings,P=project,o=P.object,isOnce=P.schedule.mode==='once';
+  // 1) Basisleistungen pro Einsatz
+  const b={};let base=0;
+  for(const [id] of BASIC){
+    const s=P.basic[id];let auto;
+    if(id==='floor')auto=n(o.area)/Math.max(1,n(S.speed[o.type]))*60*(SOIL[o.soil]||1);
+    else if(id==='sanitary')auto=(n(s.qty)||n(o.wc))*n(S.wcMin);
+    else if(id==='kitchen')auto=(n(s.qty)||n(o.kitchen))*n(S.kitchenMin);
+    else auto=n(s.qty)*n(S.basicMin[id]);
+    const used=isSet(s.autoOverride)?n(s.autoOverride):auto;
+    b[id]={auto,used};if(s.enabled)base+=used;
+  }
+  const extraFloors=Math.max(0,Math.floor(n(o.floors))-1);
+  const floorAdd=base>0?extraFloors*(n(S.floorMin)+(o.elevator?0:n(S.stairsMin))):0;
+  const baseTotal=base+floorAdd;
+  const step=Math.max(1,n(S.roundMinutes));
+  const rounded=baseTotal>0?Math.ceil(baseTotal/step-1e-9)*step:0;
+  const visit=isSet(P.calc.visitOverride)?n(P.calc.visitOverride):rounded;
+
+  // 2) Zusatzleistungen
+  let exM=0,exO=0;
+  for(const [id] of EXTRAS){
+    const s=P.extras[id];if(!s.enabled)continue;
+    const m=isSet(s.override)?n(s.override):n(s.minutes);
+    if(isOnce||s.frequency==='once')exO+=m/60;else exM+=m/60*FREQ[s.frequency]/12;
+  }
+
+  // 3) Fenster
+  const w=P.window;
+  const wCount=Object.values(w.counts).reduce((a,c)=>a+n(c),0);
+  let wAuto=Object.entries(w.counts).reduce((a,[k,c])=>a+n(c)*n(S.windows[k]),0);
+  wAuto*=n({inside:S.windowInside,outside:S.windowOutside,both:S.windowBoth}[w.sides]);
+  wAuto*=n(S.windowAccess[w.access]);
+  if(w.frame)wAuto+=wCount*n(S.windowFrame);
+  if(w.sill)wAuto+=wCount*n(S.windowSill);
+  const wMin=isSet(w.override)?n(w.override):wAuto;
+  const wOnce=w.enabled&&(isOnce||w.frequency==='once');
+  const wRec=w.enabled&&!wOnce;
+  const wM=wRec?wMin/60*FREQ[w.frequency]/12:0;
+  const wO=wOnce?wMin/60:0;
+
+  // 4) Stunden & Anfahrten
+  const visits=isOnce?0:n(P.schedule.perWeek)*52/12;
+  const baseM=visit/60*visits;
+  const cleanM=baseM+exM+wM;
+  const tripsM=visits+(wRec&&w.separate?FREQ[w.frequency]/12:0);
+  const cleanO=(isOnce?visit/60:0)+exO+wO;
+  const tripsO=(isOnce?1:0)+(wOnce&&w.separate?1:0);
+
+  // 5) Kostensätze
+  const tw=P.extras.takeWaste;
+  const twOnce=isOnce||tw.frequency==='once';
+  const dispM=tw.enabled&&!twOnce?n(S.disposal)*FREQ[tw.frequency]/12:0;
+  const dispO=tw.enabled&&twOnce?n(S.disposal):0;
+  const machineRate=P.calc.machine==='Keine'?0:n(S.machine[P.calc.machine]);
+  const machineCost=n(P.calc.machineHours)*machineRate;
+  const extraCost=n(P.calc.extraCosts);
+  const fixed=FIXED.reduce((a,[k])=>a+n(S[k]),0);
+  const fixedHourly=n(S.monthlyHours)>0?fixed/n(S.monthlyHours):0;
+  const sur=n(S.surcharge[P.schedule.window]);
+  const labor=n(S.ownerRate)*(1+sur/100)+n(S.clothes)+n(S.training)+n(S.extraInsurance);
+  const material=n(S.material[o.type]),equip=n(S.equipmentRate);
+  const kmCharged=Math.max(0,n(P.schedule.km)-n(S.freeZoneKm));
+  const travelHPerTrip=n(P.schedule.travelMin)/60;
+  const tripCost=travelHPerTrip*n(S.travelRate)+kmCharged*n(S.kmRate)+n(P.schedule.parking);
+  const margin=isSet(P.calc.marginOverride)?n(P.calc.marginOverride):n(S.profit);
+
+  function block(h,trips,disp,mach,extra,manual){
+    const items=[
+      ['Arbeitszeit'+(sur?` (inkl. ${fmtN(sur)} % Zuschlag ${P.schedule.window})`:''),h*labor],
+      ['Fixkostenanteil',h*fixedHourly],['Reinigungsmaterial',h*material],['Geräte',h*equip],
+      ['Maschine',mach],['Anfahrt (Zeit, km, Parken)',trips*tripCost],['Entsorgung',disp],['Weitere Kosten',extra]];
+    const cost=items.reduce((a,x)=>a+x[1],0);
+    const proposed=margin>=100?NaN:cost/(1-margin/100);
+    const auto=cost>0?(Number.isFinite(proposed)?Math.ceil(proposed/5-1e-9)*5:NaN):0;
+    const price=isSet(manual)?n(manual):auto;
+    const travelH=trips*travelHPerTrip;
+    return{items,cost,proposed,auto,price,profit:price-cost,hours:h,trips,travelH,manual:isSet(manual)};
+  }
+  const M=block(cleanM,tripsM,dispM,isOnce?0:machineCost,isOnce?0:extraCost,isOnce?null:P.calc.manualPrice);
+  const O=block(cleanO,tripsO,dispO,isOnce?machineCost:0,isOnce?extraCost:0,isOnce?P.calc.manualPrice:null);
+  const main=isOnce?O:M;
+  const workH=main.hours+main.travelH;
+  const rate=workH>0&&Number.isFinite(main.price)?main.price/workH:0;
+  const perVisit=isOnce?O.price:(visits>0?M.price/visits:0);
+  const hasOnceExtras=!isOnce&&(O.cost>0);
+  return{b,base,floorAdd,extraFloors,baseTotal,rounded,visit,exM,exO,wAuto,wMin,wCount,wM,wO,visits,baseM,cleanM,cleanO,tripsM,tripsO,
+    fixed,fixedHourly,labor,sur,material,equip,tripCost,kmCharged,margin,M,O,main,isOnce,workH,rate,perVisit,hasOnceExtras};
+}
+
+function warnings(t){
+  const W=[],S=settings,P=project;
+  if(!n(P.object.area)&&P.basic.floor.enabled)W.push(['err','Gesamtfläche fehlt – Bodenreinigung wird mit 0 Minuten berechnet.']);
+  if(t.visit<=0)W.push(['err','Keine Einsatzzeit: bitte Basisleistungen auswählen oder eine Gesamtzeit eintragen.']);
+  if(!t.isOnce&&!n(P.schedule.perWeek))W.push(['err','Einsätze pro Woche ist 0.']);
+  if(!n(S.monthlyHours))W.push(['err','Geplante Stunden pro Monat sind 0 – Fixkosten werden nicht verteilt.']);
+  if(t.margin>=100)W.push(['err','Gewinnmarge muss unter 100 % liegen.']);
+  if(Number.isFinite(t.main.price)&&t.main.price<t.main.cost)W.push(['err','Verlustgeschäft: Der Preis liegt unter den Kosten.']);
+  if(t.rate&&(t.rate<n(S.targetLow)||t.rate>n(S.targetHigh)))W.push(['warn',`Effektiver Stundensatz ${eur(t.rate)} liegt außerhalb des Zielbereichs (${eur(S.targetLow)} – ${eur(S.targetHigh)}).`]);
+  if(n(S.minVisit)>0&&t.perVisit>0&&t.perVisit<n(S.minVisit))W.push(['warn',`Preis je Einsatz (${eur(t.perVisit)}) liegt unter dem Mindestbetrag von ${eur(S.minVisit)}.`]);
+  if(isSet(P.calc.visitOverride))W.push(['warn','Gesamtzeit pro Einsatz ist manuell überschrieben – bei Leistungsänderungen prüfen.']);
+  if(t.main.manual)W.push(['warn','Preis ist manuell festgelegt.']);
+  if(n(P.object.wc)>0&&!P.basic.sanitary.enabled)W.push(['warn','WCs sind erfasst, aber die Sanitärreinigung ist nicht ausgewählt.']);
+  if(n(P.object.kitchen)>0&&!P.basic.kitchen.enabled)W.push(['warn','Küchen sind erfasst, aber die Küchenreinigung ist nicht ausgewählt.']);
+  if(P.window.enabled&&t.wCount===0&&!isSet(P.window.override))W.push(['warn','Fensterreinigung ist aktiv, aber es sind keine Fenster erfasst.']);
+  if(!t.isOnce&&t.visit>0&&t.visit<30&&t.M.travelH>t.baseM*.5)W.push(['warn','Kurzer Einsatz mit verhältnismäßig hoher Fahrtzeit.']);
+  const ft=Object.values(P.object.floorTypes).reduce((a,v)=>a+n(v),0);
+  if(ft&&Math.abs(ft-n(P.object.area))>1)W.push(['warn',`Summe der Bodenarten (${fmtN(ft)} m²) passt nicht zur Gesamtfläche (${fmtN(P.object.area)} m²).`]);
+  return W;
+}
+
+/* ===================== UI-Bausteine ===================== */
+function card(title,body,sub='',right=''){return `<section class="card"><div class="card-head"><div><h2>${esc(title)}</h2>${sub?`<p class="sub">${sub}</p>`:''}</div>${right}</div>${body}</section>`;}
+function grid(items,cls=''){return `<div class="grid ${cls}">${items.join('')}</div>`;}
+function num(label,path,opt={}){
+  const v=get(path);const over=opt.nullable&&isSet(v);
+  return `<label class="field ${opt.cls||''}">${esc(label)}<div class="inp"><input type="text" inputmode="decimal" autocomplete="off" data-path="${esc(path)}" data-kind="num" ${opt.nullable?'data-nullable="1"':''} value="${esc(inputVal(v))}" placeholder="${esc(opt.ph??'0')}" class="${over&&opt.mark!==false?'overridden':''}">${opt.unit?`<span class="unit">${esc(opt.unit)}</span>`:''}</div>${opt.hint?`<span class="hint">${opt.hint}</span>`:''}</label>`;
+}
+function text(label,path,opt={}){
+  const v=get(path);
+  if(opt.area)return `<label class="field ${opt.cls||''}">${esc(label)}<textarea data-path="${esc(path)}" rows="2">${esc(v)}</textarea></label>`;
+  return `<label class="field ${opt.cls||''}">${esc(label)}<input class="inp-plain" type="${opt.type||'text'}" data-path="${esc(path)}" value="${esc(v)}" placeholder="${esc(opt.ph||'')}"></label>`;
+}
+function sel(label,path,options,opt={}){
+  const v=get(path);
+  return `<label class="field ${opt.cls||''}">${esc(label)}<select data-path="${esc(path)}">${options.map(([k,l])=>`<option value="${esc(k)}" ${String(v)===String(k)?'selected':''}>${esc(l)}</option>`).join('')}</select>${opt.hint?`<span class="hint">${opt.hint}</span>`:''}</label>`;
+}
+function sw(label,path,opt={}){
+  return `<label class="switch"><input type="checkbox" data-path="${esc(path)}" ${get(path)?'checked':''}><span class="track"></span><span>${esc(label)}</span></label>${opt.desc?`<div class="desc">${opt.desc}</div>`:''}`;
+}
+function swField(label,path){return `<div class="field">${esc(label)}${sw(get(path)?'Ja':'Nein',path)}</div>`;}
+function seg(path,options){const v=get(path);return `<div class="seg">${options.map(([k,l])=>`<button type="button" data-set="${esc(path)}" data-value="${esc(k)}" class="${String(v)===String(k)?'on':''}">${esc(l)}</button>`).join('')}</div>`;}
+function freqSel(path,label='Wiederholung'){return sel(label,path,Object.entries(FREQ_L));}
+function resetBtn(path,label='Auf Automatik'){return isSet(get(path))?`<button type="button" class="linkbtn" data-reset="${esc(path)}">↺ ${esc(label)}</button>`:'';}
+
+/* ===================== Seiten ===================== */
+function pageObject(t){
+  const P=project;
+  return card('Kunde',grid([
+      text('Kundenname / Firma','project.customer.name'),text('Ansprechpartner','project.customer.contact'),
+      text('Telefon','project.customer.phone',{type:'tel'}),text('E-Mail','project.customer.email',{type:'email'}),
+      text('Objektadresse','project.customer.address',{cls:'span2'}),text('Zugang / Schlüssel / Code','project.customer.access'),
+      text('Notizen','project.customer.notes',{area:true,cls:'span2'})]),'Kontaktdaten und Zugang zum Objekt')
+  +card('Objekt',grid([
+      sel('Objektart','project.object.type',TYPES.map(x=>[x,x]),{hint:`Flächenleistung ${fmtN(settings.speed[P.object.type])} m²/Std.`}),
+      num('Gesamtfläche','project.object.area',{unit:'m²'}),
+      num('WC-Anzahl','project.object.wc',{unit:'Stk.',hint:'Aktiviert die Sanitärreinigung automatisch'}),
+      num('Küchen / Teeküchen','project.object.kitchen',{unit:'Stk.',hint:'Aktiviert die Küchenreinigung automatisch'}),
+      num('Etagen','project.object.floors',{unit:'Etg.',hint:`+${fmtN(settings.floorMin)} Min. je weitere Etage`}),
+      swField('Aufzug vorhanden','project.object.elevator'),
+      `<div class="field">Verschmutzung${seg('project.object.soil',[['leicht','Leicht'],['normal','Normal'],['stark','Stark']])}<span class="hint">Faktor ×${fmtN(SOIL[P.object.soil])} auf die Bodenzeit</span></div>`]),'Grunddaten für die automatische Zeitberechnung')
+  +card('Bodenarten',grid(Object.keys(P.object.floorTypes).map(k=>num(k,'project.object.floorTypes.'+k,{unit:'m²'})),'g3'),'Nur zur Dokumentation – die Summe sollte der Gesamtfläche entsprechen.')
+  +card('Einsätze & Anfahrt',
+      `<div class="row" style="margin-bottom:16px">${seg('project.schedule.mode',[['weekly','Wiederkehrend (Monatspreis)'],['once','Einmaliger Auftrag']])}</div>`
+      +grid([
+        P.schedule.mode==='weekly'?num('Einsätze pro Woche','project.schedule.perWeek',{unit:'× / Wo.',hint:`= ${fmt(t.visits)} Einsätze pro Monat`}):'',
+        sel('Zeitfenster','project.schedule.window',WINDOW_SLOTS.map(x=>[x,x]),{hint:n(settings.surcharge[P.schedule.window])?`Zuschlag ${fmtN(settings.surcharge[P.schedule.window])} % auf die Arbeitszeit`:'Kein Zuschlag'}),
+        num('Fahrzeit hin & zurück','project.schedule.travelMin',{unit:'Min.'}),
+        num('Kilometer hin & zurück','project.schedule.km',{unit:'km',hint:n(settings.freeZoneKm)?`${fmtN(settings.freeZoneKm)} km je Anfahrt kostenfrei`:''}),
+        num('Parken je Anfahrt','project.schedule.parking',{unit:'€'})]),
+      'Häufigkeit, Zeitfenster und Anfahrtskosten je Termin');
+}
+
+function pageServices(t){
+  const P=project,S=settings;
+  let basic='';
+  for(const [id,label,unit,desc] of BASIC){
+    const s=P.basic[id],r=t.b[id];
+    const per=id==='floor'?null:id==='sanitary'?S.wcMin:id==='kitchen'?S.kitchenMin:S.basicMin[id];
+    let body='';
+    if(s.enabled){
+      const qtyField=id==='floor'
+        ?`<div class="stat">Fläche<strong>${fmtN(P.object.area)} m²</strong></div>`
+        :num('Anzahl / Fläche','project.basic.'+id+'.qty',{unit,ph:id==='sanitary'?String(n(P.object.wc)):id==='kitchen'?String(n(P.object.kitchen)):'0',hint:`${fmtN(per)} Min. je ${unit}`});
+      body=`<div class="svc-body">${grid([qtyField,`<div class="stat">Automatisch<strong>${fmt(r.auto)} Min.</strong></div>`,num('Manuelle Zeit','project.basic.'+id+'.autoOverride',{unit:'Min.',nullable:true,ph:'Auto'})])}<div class="row between" style="margin-top:10px"><span class="muted">Verwendet: <b>${fmt(r.used)} Min.</b> pro Einsatz</span>${resetBtn('project.basic.'+id+'.autoOverride')}</div></div>`;
+    }
+    basic+=`<div class="svc ${s.enabled?'on':''}"><div class="svc-head"><div>${sw(label,'project.basic.'+id+'.enabled',{desc:esc(desc)})}</div>${s.enabled?`<span class="pill blue">${fmt(r.used,0)} Min.</span>`:''}</div>${body}</div>`;
+  }
+  let extras='';
+  for(const [id,label] of EXTRAS){
+    const s=P.extras[id];let body='';
+    const m=isSet(s.override)?n(s.override):n(s.minutes);
+    if(s.enabled){
+      body=`<div class="svc-body">${grid([
+        id==='custom'?text('Bezeichnung','project.extras.custom.name'):'',
+        num('Vorgabezeit je Ausführung','project.extras.'+id+'.minutes',{unit:'Min.'}),
+        num('Manuelle Zeit','project.extras.'+id+'.override',{unit:'Min.',nullable:true,ph:'Vorgabe'}),
+        t.isOnce?`<div class="stat">Wiederholung<strong>Einmalig</strong></div>`:freqSel('project.extras.'+id+'.frequency')])}
+        <div class="row between" style="margin-top:10px"><span class="muted">${id==='takeWaste'?`Zzgl. ${eur(S.disposal)} Entsorgung je Mitnahme`:''}</span>${resetBtn('project.extras.'+id+'.override')}</div></div>`;
+    }
+    const fr=t.isOnce||s.frequency==='once'?'einmalig':FREQ_L[s.frequency].toLowerCase();
+    extras+=`<div class="svc ${s.enabled?'on':''}"><div class="svc-head"><div>${sw(id==='custom'&&s.name?s.name:label,'project.extras.'+id+'.enabled')}</div>${s.enabled?`<span class="pill ${fr==='einmalig'?'orange':'blue'}">${fmtN(m)} Min. · ${esc(fr)}</span>`:''}</div>${body}</div>`;
+  }
+  const visitInfo=`<table><tbody>
+    <tr><td>Summe ausgewählter Basisleistungen</td><td class="r">${fmt(t.base)} Min.</td></tr>
+    ${t.floorAdd?`<tr><td>Etagenzuschlag (${t.extraFloors} weitere Etage${t.extraFloors>1?'n':''}${project.object.elevator?', mit Aufzug':', ohne Aufzug'})</td><td class="r">${fmt(t.floorAdd)} Min.</td></tr>`:''}
+    <tr><td>Aufgerundet auf ${fmtN(settings.roundMinutes)}-Minuten-Schritte</td><td class="r">${fmt(t.rounded)} Min.</td></tr>
+    <tr class="sum"><td>Für die Kalkulation verwendet</td><td class="r">${fmt(t.visit)} Min.</td></tr></tbody></table>
+    <div class="grid" style="margin-top:14px">${num('Manuelle Gesamtzeit pro Einsatz','project.calc.visitOverride',{unit:'Min.',nullable:true,ph:'Auto'})}</div>
+    <div class="row between" style="margin-top:8px"><span class="muted">Eine manuelle Gesamtzeit bleibt bei Leistungsänderungen bestehen.</span>${resetBtn('project.calc.visitOverride','Gesamtzeit auf Automatik')}</div>`;
+  return card('Basisleistungen pro Einsatz',basic,'Jede ausgewählte Leistung fließt in die Einsatzzeit ein. Flächen und Arbeitsplätze nicht doppelt zählen.',`<span class="pill blue">${fmt(t.visit,0)} Min. / Einsatz</span>`)
+    +card('Einsatzzeit',visitInfo)
+    +card('Zusatzleistungen',extras,t.isOnce?'Einmaliger Auftrag: Alle Zusatzleistungen werden einmalig im Preis berechnet.':'Regelmäßige Leistungen werden auf den Monat umgerechnet, einmalige separat ausgewiesen.');
+}
+
+function pageWindows(t){
+  const w=project.window,S=settings;
+  const head=`<div class="svc-head" style="padding:0 0 4px"><div>${sw('Fensterreinigung anbieten','project.window.enabled')}</div>${w.enabled?`<span class="pill blue">${fmt(t.wMin,0)} Min. je Termin</span>`:''}</div>`;
+  if(!w.enabled)return card('Fensterreinigung',head,'Glasflächen, Rahmen und Fensterbänke');
+  const body=head+`<div class="divider"></div>`
+    +grid(Object.keys(w.counts).map(k=>num(k,'project.window.counts.'+k,{unit:'Stk.',hint:`${fmtN(S.windows[k])} Min. je Fenster`})),'g3')
+    +`<div class="divider"></div>`
+    +grid([
+      `<div class="field">Reinigungsseiten${seg('project.window.sides',[['inside','Innen'],['outside','Außen'],['both','Innen & Außen']])}</div>`,
+      sel('Zugang','project.window.access',Object.keys(S.windowAccess).map(k=>[k,`${k} (×${fmtN(S.windowAccess[k])})`])),
+      t.isOnce?`<div class="stat">Wiederholung<strong>Einmalig</strong></div>`:freqSel('project.window.frequency'),
+      num('Manuelle Zeit je Termin','project.window.override',{unit:'Min.',nullable:true,ph:'Auto'})])
+    +`<div class="row" style="gap:28px;margin-top:16px">${sw(`Rahmen reinigen (+${fmtN(S.windowFrame)} Min./Fenster)`,'project.window.frame')}${sw(`Fensterbänke (+${fmtN(S.windowSill)} Min./Fenster)`,'project.window.sill')}${sw('Separater Termin mit eigener Anfahrt','project.window.separate')}</div>`
+    +`<div class="divider"></div><div class="grid g3">
+      <div class="stat">Fenster gesamt<strong>${fmtN(t.wCount)}</strong></div>
+      <div class="stat">Automatische Zeit<strong>${fmt(t.wAuto)} Min.</strong></div>
+      <div class="stat">Verwendet je Termin<strong>${fmt(t.wMin)} Min.</strong></div>
+      <div class="stat">${t.wO?'Einmalig':'Pro Monat'}<strong>${hrs(t.wO||t.wM)}</strong></div></div>
+    <div class="row between" style="margin-top:10px"><span class="muted">Hubsteiger-Miete und Sonderkosten unter „Kalkulation → Weitere Kosten“ erfassen.</span>${resetBtn('project.window.override','Fensterzeit auf Automatik')}</div>`;
+  return card('Fensterreinigung',body,'Glasflächen, Rahmen und Fensterbänke');
+}
+
+function costTable(B,title){
+  return `<table><thead><tr><th>${esc(title)}</th><th class="r">Betrag</th></tr></thead><tbody>
+    ${B.items.filter(x=>Math.abs(x[1])>0.0001).map(([l,v])=>`<tr><td>${esc(l)}</td><td class="r">${eur(v)}</td></tr>`).join('')||'<tr><td colspan="2" class="muted">Noch keine Kosten</td></tr>'}
+    <tr class="total"><td>Selbstkosten</td><td class="r">${eur(B.cost)}</td></tr>
+    <tr><td>Rechnerischer Preis bei ${fmtN(project.calc.marginOverride??settings.profit)} % Marge</td><td class="r">${eur(B.proposed)}</td></tr>
+    <tr><td>Gewinn</td><td class="r">${eur(B.profit)}</td></tr>
+    <tr class="price"><td>${B.manual?'Manueller Preis':'Angebotspreis (auf 5 € gerundet)'}</td><td class="r">${eur(B.price)}</td></tr></tbody></table>`;
+}
+
+function pageCalc(t){
+  const W=warnings(t),m=t.main,isOnce=t.isOnce;
+  const rateCls=!t.rate?'':(t.rate<n(settings.targetLow)||t.rate>n(settings.targetHigh))?'orange':'green';
+  const kpis=`<div class="kpis">
+    <div class="kpi main"><span>${isOnce?'Einmaliger Preis':'Monatspreis'} netto</span><strong>${eur(m.price)}</strong></div>
+    <div class="kpi"><span>Selbstkosten</span><strong>${eur(m.cost)}</strong></div>
+    <div class="kpi"><span>Gewinn</span><strong style="color:${m.profit<0?'var(--danger)':'var(--accent)'}">${eur(m.profit)}</strong></div>
+    <div class="kpi"><span>Eff. Stundensatz</span><strong>${eur(t.rate)}</strong>${rateCls?`<span class="pill ${rateCls}" style="margin-top:6px">${rateCls==='green'?'im Zielbereich':'außerhalb Ziel'}</span>`:''}</div></div>`;
+  const inputs=grid([
+    num('Gewinnmarge','project.calc.marginOverride',{unit:'%',nullable:true,ph:fmtN(settings.profit),hint:'Leer = Wert aus Einstellungen · Marge vom Verkaufspreis'}),
+    num(isOnce?'Manueller Einmalpreis':'Manueller Monatspreis','project.calc.manualPrice',{unit:'€',nullable:true,ph:fmtN(m.auto),hint:'Leer = berechneter Vorschlag'}),
+    sel('Maschine','project.calc.machine',[['Keine','Keine'],...Object.keys(settings.machine).map(k=>[k,`${k} (${eur(settings.machine[k])}/Std.)`])]),
+    num(isOnce?'Maschinenstunden gesamt':'Maschinenstunden pro Monat','project.calc.machineHours',{unit:'Std.'}),
+    num(isOnce?'Weitere Kosten (einmalig)':'Weitere Kosten pro Monat','project.calc.extraCosts',{unit:'€',hint:'z. B. Hubsteiger-Miete, Spezialmittel'})])
+    +`<div class="row" style="margin-top:10px">${resetBtn('project.calc.manualPrice','Preis auf Automatik')}${resetBtn('project.calc.marginOverride','Marge zurücksetzen')}</div>`;
+  const timeRows=isOnce
+    ?[['Einsatzzeit',t.visit/60],['Zusatzleistungen',t.exO],['Fenster',t.wO],['Fahrtzeit',t.O.travelH]]
+    :[['Basisreinigung ('+fmt(t.visits)+' Einsätze)',t.baseM],['Zusatzleistungen',t.exM],['Fenster',t.wM],['Fahrtzeit ('+fmt(t.tripsM)+' Anfahrten)',t.M.travelH]];
+  const total=timeRows.reduce((a,x)=>a+x[1],0);
+  const timeTable=`<table><thead><tr><th>${isOnce?'Zeitaufwand gesamt':'Zeitaufwand pro Monat'}</th><th class="r">Stunden</th></tr></thead><tbody>
+    ${timeRows.map(([l,v])=>`<tr><td>${esc(l)}</td><td class="r">${fmt(v)}</td></tr>`).join('')}
+    <tr class="total"><td>Gesamt</td><td class="r">${fmt(total)}</td></tr></tbody></table>
+    <p class="muted" style="margin-top:12px">Stundensatz Arbeit inkl. Nebenkosten: ${eur(t.labor)} · Fixkostenanteil: ${eur(t.fixedHourly)}/Std. · Material: ${eur(t.material)}/Std. · Geräte: ${eur(t.equip)}/Std. · Kosten je Anfahrt: ${eur(t.tripCost)}</p>`;
+  const warnHtml=W.length?W.map(([k,msg])=>`<div class="alert ${k}">${k==='err'?'⛔':'⚠️'} <span>${esc(msg)}</span></div>`).join(''):'<div class="alert ok">✅ <span>Keine Auffälligkeiten – die Kalkulation ist plausibel.</span></div>';
+  const snaps=snapshots.length?`<table><thead><tr><th>Kunde</th><th>Datum</th><th>Art</th><th class="r">Preis</th><th class="r"></th></tr></thead><tbody>${snapshots.map((s,i)=>`<tr><td><b>${esc(s.customer||'Ohne Namen')}</b></td><td>${esc(s.date)}</td><td>${esc(s.mode||'')}</td><td class="r">${eur(s.price)}</td><td class="r"><div class="row" style="justify-content:flex-end;gap:6px"><button type="button" class="btn ghost sm" data-load="${i}">Laden</button><button type="button" class="btn danger sm" data-delete="${i}">Löschen</button></div></td></tr>`).join('')}</tbody></table>`:'<p class="muted">Noch keine Kalkulationen gespeichert.</p>';
+  return kpis
+    +card('Prüfung',warnHtml)
+    +card('Preis & Zusatzkosten',inputs)
+    +card(isOnce?'Kostenaufstellung – einmaliger Auftrag':'Kostenaufstellung pro Monat',costTable(m,'Position'))
+    +(t.hasOnceExtras?card('Einmalige Zusatzleistungen (separat)',costTable(t.O,'Position'),'Wird zusätzlich zum Monatspreis einmalig berechnet.'):'')
+    +card('Zeitbilanz',timeTable)
+    +card('Gespeicherte Kalkulationen',snaps,'',`<div class="row"><button type="button" class="btn" id="snapshot">Als Snapshot speichern</button><button type="button" class="btn ghost" id="export">Backup exportieren</button></div>`);
+}
+
+function pageSettings(){
+  const S=settings;
+  const g=(arr)=>grid(arr.map(([l,k,u,h])=>num(l,'settings.'+k,{unit:u,hint:h})));
+  const typeTable=`<table><thead><tr><th>Objektart</th><th>Flächenleistung (m²/Std.)</th><th>Material (€/Std.)</th></tr></thead><tbody>${TYPES.map(k=>`<tr><td><b>${esc(k)}</b></td><td>${num('','settings.speed.'+k,{unit:'m²/h'})}</td><td>${num('','settings.material.'+k,{unit:'€/h'})}</td></tr>`).join('')}</tbody></table>`;
+  const fixedSum=FIXED.reduce((a,[k])=>a+n(S[k]),0);
+  return card('Stundensätze & Gewinn',g([
+      ['Eigene Arbeitszeit','ownerRate','€/Std.'],['Arbeitskleidung','clothes','€/Std.'],['Schulung','training','€/Std.'],['Weitere Versicherung','extraInsurance','€/Std.'],
+      ['Geräte','equipmentRate','€/Std.'],['Gewinnmarge','profit','%','Marge vom Verkaufspreis (20 % = 25 % Aufschlag)'],
+      ['Ziel-Stundensatz min.','targetLow','€/Std.'],['Ziel-Stundensatz max.','targetHigh','€/Std.'],['Mindestbetrag je Einsatz','minVisit','€','Warnhinweis bei Unterschreitung; 0 = aus']]))
+  +card('Monatliche Fixkosten',g([...FIXED.map(([k,l])=>[l,k,'€/Mon.']),['Geplante Arbeitsstunden / Monat','monthlyHours','Std.','Fixkosten werden auf diese Stunden verteilt']]),`Summe ${eur(fixedSum)} pro Monat = ${eur(n(S.monthlyHours)>0?fixedSum/n(S.monthlyHours):0)} je Arbeitsstunde`)
+  +card('Anfahrt & Entsorgung',g([['Fahrtzeit','travelRate','€/Std.'],['Kilometerkosten','kmRate','€/km'],['Kostenfreie Kilometer je Anfahrt','freeZoneKm','km'],['Entsorgung je Mitnahme','disposal','€']]))
+  +card('Objektarten',typeTable,'Flächenleistung für die Bodenreinigung und Materialkosten je Reinigungsstunde')
+  +card('Zeitwerte Basisleistungen',g([['WC','wcMin','Min.'],['Küche','kitchenMin','Min.'],['Ablagen & Oberflächen','basicMin.surface','Min.'],['Arbeitsplätze','basicMin.stations','Min.'],['Papierkörbe','basicMin.bins','Min.'],['Türgriffe & Kontaktflächen','basicMin.handles','Min.'],['Eingang / Treppenhaus je m²','basicMin.entrance','Min.'],['Je weitere Etage','floorMin','Min.'],['Zusatz je Etage ohne Aufzug','stairsMin','Min.'],['Rundung der Einsatzzeit','roundMinutes','Min.']]))
+  +card('Zuschläge Zeitfenster',g(WINDOW_SLOTS.map(k=>[k,'surcharge.'+k,'%'])),'Prozentualer Aufschlag auf den eigenen Stundensatz')
+  +card('Fenster',g([...Object.keys(S.windows).map(k=>[k+' je Fenster','windows.'+k,'Min.']),['Faktor Innen','windowInside','×'],['Faktor Außen','windowOutside','×'],['Faktor Innen & Außen','windowBoth','×'],...Object.keys(S.windowAccess).map(k=>['Zugang '+k,'windowAccess.'+k,'×']),['Rahmen je Fenster','windowFrame','Min.'],['Fensterbank je Fenster','windowSill','Min.']]))
+  +card('Maschinen',g(Object.keys(S.machine).map(k=>[k,'machine.'+k,'€/Std.'])))
+  +card('Datensicherung',`<div class="row"><button type="button" class="btn" id="export">Backup exportieren</button><label class="btn ghost" style="cursor:pointer">Backup importieren<input id="import" type="file" accept="application/json,.json" style="display:none"></label><button type="button" class="btn danger" id="resetSettings">Einstellungen auf Standard</button></div><p class="muted" style="margin-top:12px">Alle Daten liegen ausschließlich in diesem Browser. Beim Löschen der Browserdaten gehen sie ohne Backup verloren.</p>`);
+}
+
+/* ===================== Zusammenfassung & Druck ===================== */
+function sideHtml(t){
+  const m=t.main,W=warnings(t),errs=W.filter(x=>x[0]==='err').length;
+  const rateCls=!t.rate?'':(t.rate<n(settings.targetLow)||t.rate>n(settings.targetHigh))?'orange':'green';
+  return `<div class="sum-card"><div class="sum-top"><small>${t.isOnce?'Einmaliger Preis · netto':'Monatspreis · netto'}</small><div class="price">${eur(m.price)}</div>
+    ${t.hasOnceExtras?`<div class="once">+ ${eur(t.O.price)} einmalige Leistungen</div>`:''}${project.customer.name?`<div class="once">${esc(project.customer.name)}</div>`:''}</div>
+    <div class="sum-list">
+      <div><span>Zeit pro Einsatz</span><b>${fmt(t.visit,0)} Min.</b></div>
+      ${t.isOnce?'':`<div><span>Einsätze pro Monat</span><b>${fmt(t.visits)}</b></div>`}
+      <div><span>Arbeitsstunden${t.isOnce?'':' / Monat'}</span><b>${fmt(t.workH)}</b></div>
+      <div><span>Selbstkosten</span><b>${eur(m.cost)}</b></div>
+      <div><span>Gewinn</span><b style="color:${m.profit<0?'var(--danger)':'var(--accent)'}">${eur(m.profit)}</b></div>
+      <div><span>Eff. Stundensatz</span><b>${eur(t.rate)} ${rateCls?`<span class="pill ${rateCls}">${rateCls==='green'?'OK':'!'}</span>`:''}</b></div>
+      ${t.isOnce?'':`<div><span>Preis je Einsatz</span><b>${eur(t.perVisit)}</b></div>`}
+    </div>
+    <div class="sum-foot">${W.length?`<button type="button" class="btn ${errs?'danger':'ghost'}" data-tab="3">${errs?'⛔':'⚠️'} ${W.length} Hinweis${W.length>1?'e':''} prüfen</button>`:'<div class="alert ok" style="margin:0">✅ Kalkulation plausibel</div>'}</div></div>`;
+}
+function printHtml(t){
+  const P=project,m=t.main,rows=[];
+  for(const [id,label] of BASIC)if(P.basic[id].enabled)rows.push([label,`${fmt(t.b[id].used,0)} Min. je Einsatz`]);
+  for(const [id,label] of EXTRAS){const s=P.extras[id];if(s.enabled)rows.push([id==='custom'&&s.name?s.name:label,`${fmtN(isSet(s.override)?s.override:s.minutes)} Min. · ${t.isOnce||s.frequency==='once'?'einmalig':FREQ_L[s.frequency]}`]);}
+  if(P.window.enabled)rows.push(['Fensterreinigung',`${fmtN(t.wCount)} Fenster · ${fmt(t.wMin,0)} Min. · ${t.isOnce||P.window.frequency==='once'?'einmalig':FREQ_L[P.window.frequency]}`]);
+  const tr=r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`;
+  return `<h1>Clean &amp; Schee – Kalkulationsübersicht</h1><div>Stand: ${esc(new Date().toLocaleString('de-DE'))} · intern</div>
+  <h2>Kunde & Objekt</h2><table><tbody>${[['Kunde',P.customer.name],['Ansprechpartner',P.customer.contact],['Kontakt',[P.customer.phone,P.customer.email].filter(Boolean).join(' · ')],['Adresse',P.customer.address],['Objekt',`${P.object.type} · ${fmtN(P.object.area)} m² · ${fmtN(P.object.floors)} Etage(n) · Verschmutzung ${P.object.soil}`],['Einsätze',t.isOnce?'Einmaliger Auftrag':`${fmtN(P.schedule.perWeek)}× pro Woche (${fmt(t.visits)}/Monat) · ${P.schedule.window}`]].filter(r=>r[1]).map(tr).join('')}</tbody></table>
+  <h2>Leistungen</h2><table><tbody>${rows.map(tr).join('')||'<tr><td>–</td></tr>'}<tr><td><b>Einsatzzeit</b></td><td><b>${fmt(t.visit,0)} Min.</b></td></tr></tbody></table>
+  <h2>${t.isOnce?'Kosten – einmaliger Auftrag':'Kosten pro Monat'}</h2>${costTable(m,'Position')}
+  ${t.hasOnceExtras?`<h2>Einmalige Zusatzleistungen</h2>${costTable(t.O,'Position')}`:''}
+  <p>Effektiver Stundensatz: ${eur(t.rate)} · Alle Beträge netto zzgl. MwSt.</p>${P.customer.notes?`<h2>Notizen</h2><p>${esc(P.customer.notes)}</p>`:''}`;
+}
+
+/* ===================== Rendern ===================== */
+function render(){
+  const active=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.path:null;
+  const t=calc();
+  document.getElementById('tabs').innerHTML=TABS.map(([a,b],i)=>`<button type="button" class="tab ${tab===i?'active':''}" data-tab="${i}"><span class="num">${i+1}</span><span><b>${a}</b><small>${b}</small></span></button>`).join('');
+  document.getElementById('content').innerHTML=[pageObject,pageServices,pageWindows,pageCalc,pageSettings][tab](t);
+  document.getElementById('side').innerHTML=sideHtml(t);
+  document.getElementById('mbar').innerHTML=`<div><small>${t.isOnce?'Einmaliger Preis':'Monatspreis'} · netto</small><strong>${eur(t.main.price)}</strong></div><div style="text-align:end"><small>${fmt(t.visit,0)} Min. / Einsatz</small><small>${t.isOnce?'einmalig':fmt(t.visits)+' Einsätze / Monat'}</small></div>`;
+  document.getElementById('printView').innerHTML=printHtml(t);
+  if(active){const el=document.querySelector(`[data-path="${CSS.escape(active)}"]`);if(el&&el!==document.activeElement){el.focus();if(el.select&&el.dataset.kind==='num')el.select();}}
+}
+
+/* ===================== Ereignisse ===================== */
+document.addEventListener('click',e=>{
+  let a=e.target.closest('[data-tab]');
+  if(a){tab=Number(a.dataset.tab);render();window.scrollTo({top:0,behavior:'smooth'});return;}
+  a=e.target.closest('[data-set]');if(a){set(a.dataset.set,a.dataset.value);return;}
+  a=e.target.closest('[data-reset]');if(a){set(a.dataset.reset,null);return;}
+  a=e.target.closest('[data-load]');
+  if(a){if(confirm('Gespeicherten Stand laden? Aktuelle Eingaben werden ersetzt.')){const s=snapshots[Number(a.dataset.load)];project=merge(fresh(),s.project||{});settings=merge(DEFAULTS,s.settings||{});save();tab=3;render();toast('Kalkulation geladen');}return;}
+  a=e.target.closest('[data-delete]');
+  if(a){if(confirm('Snapshot endgültig löschen?')){snapshots.splice(Number(a.dataset.delete),1);save();render();toast('Snapshot gelöscht');}return;}
+  const id=e.target.closest('button')?.id;
+  if(id==='snapshot'){const t=calc();snapshots.unshift({date:new Date().toLocaleString('de-DE'),customer:project.customer.name,mode:t.isOnce?'Einmalig':'Monatlich',price:t.main.price,project:clone(project),settings:clone(settings)});save();render();toast('Kalkulation gespeichert');return;}
+  if(id==='export'){const blob=new Blob([JSON.stringify({version:2,exportedAt:new Date().toISOString(),settings,project,snapshots},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),l=document.createElement('a');l.href=url;l.download='clean-schee-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('Backup exportiert');return;}
+  if(id==='resetSettings'){if(confirm('Alle Einstellungen auf die Standardwerte zurücksetzen?')){settings=clone(DEFAULTS);save();render();toast('Einstellungen zurückgesetzt');}return;}
+  if(id==='printBtn'){render();window.print();return;}
+  if(id==='newProject'){if(confirm('Neues Objekt starten? Einstellungen und Snapshots bleiben erhalten.')){project=fresh();tab=0;save();render();toast('Neues Objekt angelegt');}return;}
+});
+
+document.addEventListener('change',async e=>{
+  const el=e.target;
+  if(el.id==='import'){
+    const f=el.files[0];if(!f)return;
+    try{const d=JSON.parse(await f.text());if(!d.project||!d.settings||!Array.isArray(d.snapshots))throw new Error('Ungültige Backup-Struktur');
+      if(confirm('Alle aktuellen Daten durch das Backup ersetzen?')){project=merge(fresh(),d.project);settings=merge(DEFAULTS,d.settings);snapshots=d.snapshots;save();render();toast('Backup importiert');}}
+    catch(err){toast('Import fehlgeschlagen: '+err.message,true);}
+    el.value='';return;
+  }
+  const p=el.dataset.path;if(!p)return;
+  let v;
+  if(el.type==='checkbox')v=el.checked;
+  else if(el.dataset.kind==='num'){
+    v=parseNum(el.value);
+    if(v===null)v=el.dataset.nullable?null:0;
+    else if(!Number.isFinite(v)||v<0){toast('Bitte eine gültige, nicht negative Zahl eingeben (z. B. 12,5).',true);render();return;}
+  }else v=el.value;
+  setRaw(p,v);
+  if(p==='project.object.wc'&&n(v)>0&&!project.basic.sanitary.enabled){project.basic.sanitary.enabled=true;toast('Sanitärreinigung wurde automatisch aktiviert');}
+  if(p==='project.object.kitchen'&&n(v)>0&&!project.basic.kitchen.enabled){project.basic.kitchen.enabled=true;toast('Küchenreinigung wurde automatisch aktiviert');}
+  save();render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.kind==='num'){e.target.blur();}});
+render();
+</script>
+</body>
+</html>
